@@ -1,0 +1,36 @@
+.main{
+    margin:0;
+    padding: 0;
+    width: 100%;
+    height: 100vh;
+    box-sizing: border-box;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-inline: 50px;
+}
+.text{
+    color: blue;
+    padding: 5px;
+    margin: 10px;
+}
+.loginText{
+    text-decoration: underline;
+    color: red;
+}
+.customLink {
+    text-decoration: none;
+  }
+.errorMessage{
+    color: red;
+}
+.successMessage{
+    color: green;
+}
