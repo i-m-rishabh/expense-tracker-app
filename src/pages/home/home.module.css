@@ -1,0 +1,36 @@
+
+.main{
+    position: relative;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: */
+    align-items: center;
+}
+.header{
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content:space-between;
+    align-items: center;
+    background-color: yellow;
+    padding: 30px;
+}
+.welcome{
+    padding-inline: 30px;
+    text-transform: uppercase;
+}
+.incompleteProfileMessage{
+    border: 1px solid black;
+    border-radius: 30px;
+    padding: 10px;
+}
+.button{
+    background:linear-gradient(red, black);
+    border-radius: 10px;
+    color: white;
+    /* padding: 10px; */
+    /* outline: none; */
+    /* text-decoration: underline; */
+
+}
