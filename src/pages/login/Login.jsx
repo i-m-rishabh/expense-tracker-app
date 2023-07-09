@@ -2,7 +2,7 @@ import SignupLoginLayout from '../../layouts/SignupLoginLayout';
 import classes from './login.module.css';
 import Input from '../../utils/Input';
 import Button from '../../utils/Button';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useContext, useState } from 'react';
 import { userContext } from '../../context/userContext/userContext';
 
@@ -12,7 +12,35 @@ const Login = () => {
     const navigate = useNavigate();
     let email;
     let password;
-
+    function updateUserProfile(idToken){
+        // useEffect(()=>{
+            fetch("https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyCoFYf3k4y5b6R_uejfdftwRMXSGn992rA",{
+                method: 'POST',
+                body: JSON.stringify({
+                    idToken: idToken
+                }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then((res)=>{
+                res.json().then((data)=>{
+                  if(res.ok){
+                      const displayName = data.users[0].displayName;
+                      const photoUrl = data.users[0].photoUrl;
+                      alert('profile fetched sussessfuly '+[displayName, photoUrl]);
+                      userCtx.updateUser(displayName, photoUrl);
+                      navigate('/home');
+                    // console.log(data.users.displayName);
+                    // console.log(data.users[0].displayName);
+                  }else{
+                    alert('Error '+ data.error.message);
+                    console.log(data);
+                  } 
+                //   navigate('/home');
+                })
+            }).catch((err)=>{console.log(err)})
+        // },[])
+    }
     async function userLogin(email, password) {
         const userData = {
             email: email,
@@ -30,7 +58,7 @@ const Login = () => {
             if (res.ok) {
                 const data = await res.json();
                 userCtx.userLoggedIn(data.idToken);
-                navigate('/home');
+                updateUserProfile(data.idToken);
                 // console.log(data.idToken);
                 // console.log("congratulations! you have successfully logged in");
             } else {

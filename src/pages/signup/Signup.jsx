@@ -48,6 +48,7 @@ const Signup = () => {
         }
         if (password !== confirmPassword) {
             setErrorMessage('passwords are not matching');
+            return;
         }
         userSignUp(email, password);
         event.target.reset();

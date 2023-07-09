@@ -1,8 +1,9 @@
 import { useContext, useRef } from 'react';
 import classes from './updateprofile.module.css';
 import { userContext } from '../../context/userContext/userContext';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate,} from 'react-router-dom';
 const UpdateProfilePage = () => {
+    const navigate = useNavigate();
     const nameRef = useRef(null);
     const imageUrlRef = useRef(null);
     const userCtx = useContext(userContext);
@@ -26,6 +27,10 @@ const UpdateProfilePage = () => {
         }).then((res)=>{
             if(res.ok){
                 alert('profile update successfully');
+                res.json().then((data)=>{
+                    userCtx.updateUser(data.displayName, data.photoUrl);
+                    navigate('/home');
+                })
             }else{
                 res.json().then((data)=>{
                     alert('ERROR '+ data.error.message);

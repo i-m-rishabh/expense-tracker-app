@@ -1,5 +1,6 @@
 
 .main{
+    box-sizing: border-box;
     position: relative;
     width: 100vw;
     display: flex;
@@ -8,6 +9,7 @@
     align-items: center;
 }
 .header{
+    box-sizing: border-box;
     position: relative;
     width: 100%;
     display: flex;
@@ -25,6 +27,13 @@
     border-radius: 30px;
     padding: 10px;
 }
+.profile{
+    width: 30px;
+    height: 30px;
+    border: 1px solid black;
+    border-radius: 30px;
+    padding: 10px;
+}
 .button{
     background:linear-gradient(red, black);
     border-radius: 10px;
@@ -32,5 +41,4 @@
     /* padding: 10px; */
     /* outline: none; */
     /* text-decoration: underline; */
-
 }
