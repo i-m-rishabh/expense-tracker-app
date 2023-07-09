@@ -8,6 +8,8 @@ const UserContextProvider = (props) => {
     let storedUser = {
         displayName: '',
         photoUrl: '',
+        localId: '',
+        emailVerified: false,
     }
     if (storedUserInJson) {
         storedUser = JSON.parse(storedUserInJson);
@@ -15,6 +17,8 @@ const UserContextProvider = (props) => {
     const [userData, setUserData] = useState(storedUser);
     const context = {
         isLoggedIn: !!idToken,
+        localId: userData.localId,
+        emailVerified: userData.emailVerified,
         displayName: userData.displayName,
         photoUrl: userData.photoUrl,
         idToken: idToken,
@@ -22,10 +26,12 @@ const UserContextProvider = (props) => {
             setIdToken(idToken);
             localStorage.setItem('idToken', idToken);
         },
-        updateUser: function (displayName, photoUrl) {
+        updateUser: function (displayName, photoUrl, localId, emailVerified) {
             const fetchedUserData = {
                 displayName: displayName,
                 photoUrl: photoUrl,
+                localId: localId,
+                emailVerified: emailVerified,
             }
             setUserData(fetchedUserData);
             localStorage.setItem("userData", JSON.stringify(fetchedUserData))

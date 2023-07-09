@@ -12,7 +12,7 @@ const Login = () => {
     const navigate = useNavigate();
     let email;
     let password;
-    function updateUserProfile(idToken){
+    function getUserProfile(idToken){
         // useEffect(()=>{
             fetch("https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyCoFYf3k4y5b6R_uejfdftwRMXSGn992rA",{
                 method: 'POST',
@@ -27,7 +27,10 @@ const Login = () => {
                   if(res.ok){
                       const displayName = data.users[0].displayName;
                       const photoUrl = data.users[0].photoUrl;
-                      userCtx.updateUser(displayName, photoUrl);
+                      const localId = data.users[0].localId;
+                      const emailVerified = data.users[0].emailVerified;
+                      
+                      userCtx.updateUser(displayName, photoUrl, localId, emailVerified);
                       alert('profile updated successfully ');
                       navigate('/home');
                     // console.log(data.users.displayName);
@@ -58,7 +61,7 @@ const Login = () => {
             if (res.ok) {
                 const data = await res.json();
                 userCtx.userLoggedIn(data.idToken);
-                updateUserProfile(data.idToken);
+                getUserProfile(data.idToken);
                 // console.log(data.idToken);
                 // console.log("congratulations! you have successfully logged in");
             } else {
