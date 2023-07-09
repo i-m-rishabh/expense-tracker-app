@@ -27,8 +27,8 @@ const Login = () => {
                   if(res.ok){
                       const displayName = data.users[0].displayName;
                       const photoUrl = data.users[0].photoUrl;
-                      alert('profile fetched sussessfuly '+[displayName, photoUrl]);
                       userCtx.updateUser(displayName, photoUrl);
+                      alert('profile updated successfully ');
                       navigate('/home');
                     // console.log(data.users.displayName);
                     // console.log(data.users[0].displayName);
