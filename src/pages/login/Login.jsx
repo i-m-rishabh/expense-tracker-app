@@ -92,6 +92,7 @@ const Login = () => {
                     <Input type={'text'} label={'Password'} onChange={(value) => { password = value;  setErrorMessage('') }} />
                     <Button text={'Login'} type={'submit'} />
                 </form>
+                <Link className={classes.forgetPassword} to={'/forget-password'}><p>Forget Passowrd</p></Link>
                 <Link className={classes.customLink} to={'/signup'}><p className={classes.text}>Don't have an account <span className={classes.signupText}>signUp</span></p></Link>
                 {errorMessage && <p className={classes.errorMessage}>{errorMessage}</p>}
             </SignupLoginLayout>
