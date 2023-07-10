@@ -3,6 +3,7 @@ import classes from './home.module.css';
 import { Link } from 'react-router-dom';
 import { userContext } from '../../context/userContext/userContext';
 import HomeProfile from './HomeProfile';
+import Logout from '../logout/Logout';
 const Home = () => {
     const userCtx = useContext(userContext);
     const idToken = userCtx.idToken;
@@ -14,11 +15,11 @@ const Home = () => {
             <div className={classes.header}>
                 <div className={classes.welcome}>welcome to expense tracker</div>
                 {!displayName && <div className={classes.incompleteProfileMessage}>your profile is incomplete <Link to={'/update-profile'}><button className={classes.button}>complete now</button></Link></div>}
-                {displayName && <HomeProfile displayName={displayName} profilePhoto={photoUrl} className={classes.profile}/>}
+                {displayName && <HomeProfile displayName={displayName} profilePhoto={photoUrl} className=""/>}
+                {userCtx.isLoggedIn && <Logout/>}
             </div>
             <hr/>
         </div>
     )
 }
-
 export default Home;

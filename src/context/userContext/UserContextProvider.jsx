@@ -24,9 +24,12 @@ const UserContextProvider = (props) => {
         idToken: idToken,
         userLoggedIn: function (idToken) {
             setIdToken(idToken);
-            localStorage.setItem('idToken', idToken);
         },
-        updateUser: function (displayName, photoUrl, localId=userData.localId, emailVerified=userData.emailVerified) {
+        userLoggedOut: function(){
+            localStorage.removeItem('idToken');
+            localStorage.removeItem('userData');
+        },
+        updateUser: function (displayName, photoUrl, localId = userData.localId, emailVerified = userData.emailVerified) {
             const fetchedUserData = {
                 displayName: displayName,
                 photoUrl: photoUrl,

@@ -21,6 +21,7 @@
 .welcome{
     padding-inline: 30px;
     text-transform: uppercase;
+    margin-right: auto;
 }
 .incompleteProfileMessage{
     border: 1px solid black;

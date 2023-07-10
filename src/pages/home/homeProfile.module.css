@@ -1,7 +1,7 @@
 .main{
     /* border: 2px solid black; */
     position: relative;
-    right: 30px;
+    right: 10px;
     display: flex;
     flex-direction: column;
     justify-content: center;
