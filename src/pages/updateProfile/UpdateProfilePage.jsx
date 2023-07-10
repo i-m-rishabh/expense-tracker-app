@@ -41,8 +41,8 @@ const UpdateProfilePage = () => {
         // {"idToken":"[ID_TOKEN]","displayName":"[NAME]","photoUrl":"[URL]","returnSecureToken":true}
         const body = {
             idToken: idToken,
-            displayName: displayName,
-            photoUrl: photoUrl,
+            displayName: name,
+            photoUrl: imageUrl,
             returnSecureToken:true
         }
 
@@ -90,7 +90,7 @@ const UpdateProfilePage = () => {
                 </form>
                 {userCtx.emailVerified && <p className={classes.verified}>Email Verified</p>}
                 {!userCtx.emailVerified && !verificationSent && <p className={classes.notVerified}>Email is not verified <a className={classes.clickHere} type='button' onClick={handleSendVerification}> click here </a> to verify</p>}
-                {verificationSent && <VerifyEmail />}
+                {verificationSent && <p>verification sent you email address pease verify and login again</p>}
             </div>
         </div>
     )

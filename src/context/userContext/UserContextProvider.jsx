@@ -26,12 +26,12 @@ const UserContextProvider = (props) => {
             setIdToken(idToken);
             localStorage.setItem('idToken', idToken);
         },
-        updateUser: function (displayName, photoUrl, localId, emailVerified) {
+        updateUser: function (displayName, photoUrl, localId=userData.localId, emailVerified=userData.emailVerified) {
             const fetchedUserData = {
                 displayName: displayName,
                 photoUrl: photoUrl,
                 localId: localId,
-                emailVerified: emailVerified,
+                emailVerified: emailVerified
             }
             setUserData(fetchedUserData);
             localStorage.setItem("userData", JSON.stringify(fetchedUserData))

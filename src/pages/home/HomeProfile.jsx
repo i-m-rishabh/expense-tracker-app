@@ -3,7 +3,7 @@ const HomeProfile = (props) => {
     return(
         <div className={classes.main}>
             <div className={classes.imageContainer}>
-                <img src={props.photoUrl} alt='profile photo'/>
+                <img src={props.profilePhoto} alt='profile photo'/>
             </div>
             <div className={classes.nameContainer}>
                 <p>{props.displayName}</p>

@@ -16,7 +16,7 @@
     justify-content:space-between;
     align-items: center;
     background-color: yellow;
-    padding: 30px;
+    padding: 5px;
 }
 .welcome{
     padding-inline: 30px;
@@ -27,18 +27,16 @@
     border-radius: 30px;
     padding: 10px;
 }
-.profile{
+/* .profile{
+    border: 5px solid red;
     width: 30px;
     height: 30px;
     border: 1px solid black;
     border-radius: 30px;
     padding: 10px;
-}
+} */
 .button{
     background:linear-gradient(red, black);
     border-radius: 10px;
     color: white;
-    /* padding: 10px; */
-    /* outline: none; */
-    /* text-decoration: underline; */
 }
