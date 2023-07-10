@@ -17,7 +17,7 @@ const Home = () => {
             <div className={classes.header}>
                 <div className={classes.welcome}>welcome to expense tracker</div>
                 {!displayName && <div className={classes.incompleteProfileMessage}>your profile is incomplete <Link to={'/update-profile'}><button className={classes.button}>complete now</button></Link></div>}
-                {displayName && <HomeProfile displayName={displayName} profilePhoto={photoUrl} className=""/>}
+                {displayName && <Link to={'/update-profile'}><HomeProfile displayName={displayName} profilePhoto={photoUrl} className=""/></Link>}
                 {userCtx.isLoggedIn && <Logout/>}
             </div>
             <div>
