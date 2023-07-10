@@ -5,12 +5,15 @@ import './index.css';
 import reportWebVitals from './reportWebVitals';
 import Router from './routing/routeSetup';
 import UserContextProvider from './context/userContext/UserContextProvider';
+import ExpenseContextProvider from './context/expenseContext/ExpenseContextProvider';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <UserContextProvider>
-      <Router />
+      <ExpenseContextProvider>
+        <Router />
+      </ExpenseContextProvider>
     </UserContextProvider>
   </React.StrictMode>
 );

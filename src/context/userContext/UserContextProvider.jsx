@@ -24,6 +24,7 @@ const UserContextProvider = (props) => {
         idToken: idToken,
         userLoggedIn: function (idToken) {
             setIdToken(idToken);
+            localStorage.setItem('idToken',idToken);
         },
         userLoggedOut: function(){
             localStorage.removeItem('idToken');

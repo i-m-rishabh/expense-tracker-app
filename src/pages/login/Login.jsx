@@ -31,7 +31,7 @@ const Login = () => {
                       const emailVerified = data.users[0].emailVerified;
                       
                       userCtx.updateUser(displayName, photoUrl, localId, emailVerified);
-                      alert('profile updated successfully ');
+                    //   alert('profile updated successfully ');
                       navigate('/home');
                     // console.log(data.users.displayName);
                     // console.log(data.users[0].displayName);
@@ -88,8 +88,8 @@ const Login = () => {
             <SignupLoginLayout>
                 <h2 className={classes.title}>Login</h2>
                 <form className={classes.form} onSubmit={handleSubmit}>
-                    <Input type={'email'} label={'Email'} onChange={(value) => { email = value; setErrorMessage('') }} />
-                    <Input type={'text'} label={'Password'} onChange={(value) => { password = value;  setErrorMessage('') }} />
+                    <Input autocomplete='off' type={'email'} label={'Email'} auto onChange={(value) => { email = value; setErrorMessage('') }} />
+                    <Input autocomplete='off' type={'text'} label={'Password'} onChange={(value) => { password = value;  setErrorMessage('') }} />
                     <Button text={'Login'} type={'submit'} />
                 </form>
                 <Link className={classes.forgetPassword} to={'/forget-password'}><p>Forget Passowrd</p></Link>
