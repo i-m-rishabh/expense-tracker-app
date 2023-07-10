@@ -5,13 +5,38 @@ import Button from '../../utils/Button';
 import { Link, useNavigate } from 'react-router-dom';
 import { useContext, useState } from 'react';
 import { userContext } from '../../context/userContext/userContext';
+import expenseContext from '../../context/expenseContext/expenseContext';
 
 const Login = () => {
     const [errorMessage, setErrorMessage] = useState('');
     const userCtx = useContext(userContext);
+    const expenseCtx = useContext(expenseContext);
     const navigate = useNavigate();
     let email;
     let password;
+    function getUserExpenses(localId){
+        fetch(`https://expense-tracker-react-ap-741f2-default-rtdb.firebaseio.com/expenses/${localId}.json`
+        ).then((res)=>{
+            if(res.ok){
+                res.json().then((data)=>{
+                    // console.log(data);
+                    let expenses = [];
+                    if(data){
+                        expenses = Object.values(data);
+                    }
+                    expenseCtx.loadExpenses(expenses);
+                    navigate('/home');
+
+                alert('expenses fetched successfully');
+
+                })
+            }else{
+                res.json().then((data)=>{
+                    alert('expenses fetching fail: '+data.error.message);
+                })
+            }
+        }).catch((err)=>{console.log(err)})
+    }
     function getUserProfile(idToken){
         // useEffect(()=>{
             fetch("https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyCoFYf3k4y5b6R_uejfdftwRMXSGn992rA",{
@@ -31,8 +56,8 @@ const Login = () => {
                       const emailVerified = data.users[0].emailVerified;
                       
                       userCtx.updateUser(displayName, photoUrl, localId, emailVerified);
+                      getUserExpenses(localId);
                     //   alert('profile updated successfully ');
-                      navigate('/home');
                     // console.log(data.users.displayName);
                     // console.log(data.users[0].displayName);
                   }else{

@@ -1,12 +1,15 @@
 import expenseContext from '../../context/expenseContext/expenseContext';
+import { userContext } from '../../context/userContext/userContext';
 import classes from './newExpense.module.css'
 import { useContext, useState } from "react";
 
 const NewExpense = () => {
+    const userCtx = useContext(userContext);
     const expenseCtx = useContext(expenseContext);
     const [amount, setAmount] = useState('');
     const [desc, setDesc] = useState('');
     const [cat, setCat] = useState('');
+    const localId = userCtx.localId;
     function handleAmountChange(evnt){
         setAmount(parseFloat(evnt.target.value));
     }
@@ -24,7 +27,24 @@ const NewExpense = () => {
             category: cat
         }
         // console.log(amount, desc, cat);
-        expenseCtx.addExpense(newExpense);
+        // adding new expense to specific user's database
+        fetch(`https://expense-tracker-react-ap-741f2-default-rtdb.firebaseio.com/expenses/${localId}.json`,{
+            method: 'POST',
+            body: JSON.stringify(newExpense),
+            headers:{
+                'Content-Type': 'application/json'
+            }
+        }).then((res)=>{
+            if(res.ok){
+                alert('expense added successfully');
+                expenseCtx.addExpense(newExpense);
+            }else{
+                res.json().then((data)=>{
+                    alert(data.error.message);
+                })
+            }
+        }).catch((err)=>console.log(err));
+        
     }
     return(
         <div className={classes.main}>
@@ -41,7 +61,7 @@ const NewExpense = () => {
                     </div>
                     <div>
                         <label>Category</label>
-                        <select onChange={handleCategoryChange}>
+                        <select onChange={handleCategoryChange} defaultValue="">
                             <option value='' disabled>select</option>
                             <option value='housing'>Housing</option>
                             <option value='trasportation'>Transportation</option>

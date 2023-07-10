@@ -5,6 +5,7 @@ const expenseContext = createContext({
     loadExpenses: function (){},
     addExpense: function (){},
     deleteExpense: function (){},
+    clearExpenses: function(){}
 });
 
 export default expenseContext;

@@ -9,5 +9,6 @@ const userContext = createContext({
     photoUrl:'',
     userLoggedIn: (idToken)=>{},
     updateUser: (displayName, photoUrl)=>{},
+    userLoggedOut: ()=>{}
 })
 export {userContext};

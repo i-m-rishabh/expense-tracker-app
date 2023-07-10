@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { userContext } from '../../context/userContext/userContext';
 import HomeProfile from './HomeProfile';
 import Logout from '../logout/Logout';
+import NewExpense from '../userExpenses/NewExpense';
+import ListExpenses from '../userExpenses/ListExpenses';
 const Home = () => {
     const userCtx = useContext(userContext);
     const idToken = userCtx.idToken;
@@ -18,7 +20,10 @@ const Home = () => {
                 {displayName && <HomeProfile displayName={displayName} profilePhoto={photoUrl} className=""/>}
                 {userCtx.isLoggedIn && <Logout/>}
             </div>
-            <hr/>
+            <div>
+                <NewExpense/>
+                <ListExpenses/>
+            </div>
         </div>
     )
 }
