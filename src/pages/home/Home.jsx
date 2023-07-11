@@ -6,6 +6,8 @@ import HomeProfile from './HomeProfile';
 import Logout from '../logout/Logout';
 import NewExpense from '../userExpenses/NewExpense';
 import ListExpenses from '../userExpenses/ListExpenses';
+import EditExpense from '../userExpenses/EditExpense';
+import ExpensePage from '../userExpenses/ExpensePage';
 const Home = () => {
     const userCtx = useContext(userContext);
     const idToken = userCtx.idToken;
@@ -21,8 +23,10 @@ const Home = () => {
                 {userCtx.isLoggedIn && <Logout/>}
             </div>
             <div>
-                <NewExpense/>
-                <ListExpenses/>
+                {/* <NewExpense/>
+                <EditExpense/>
+                <ListExpenses/> */}
+                <ExpensePage/>
             </div>
         </div>
     )

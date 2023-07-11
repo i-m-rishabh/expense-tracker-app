@@ -33,7 +33,19 @@ const ExpenseContextProvider = (props) => {
         clearExpenses: () => {
             setExpenses([]);
             localStorage.removeItem('expenses');
-        }
+        },
+        updateExpense: (expense)=>{
+            const updatedExpenses = expenses.map((item)=>{
+                if(item.id === expense.id){
+                    return expense;
+                }else{
+                    return item;
+                }
+            })
+            setExpenses(updatedExpenses);
+            localStorage.setItem('expenses', JSON.stringify(updatedExpenses));
+
+        },
     }
     return (
         <expenseContext.Provider value={context}>

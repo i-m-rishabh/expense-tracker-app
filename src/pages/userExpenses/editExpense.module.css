@@ -1,0 +1,23 @@
+.main{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.main h3{
+
+}
+.main form{
+    /* display: flex; */
+    flex-direction: column;
+    justify-content: center;
+    /* align-items: center; */
+}
+.buttonContainer{
+    margin: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}

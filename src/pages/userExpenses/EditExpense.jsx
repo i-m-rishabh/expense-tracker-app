@@ -1,14 +1,15 @@
 import expenseContext from '../../context/expenseContext/expenseContext';
 import { userContext } from '../../context/userContext/userContext';
-import classes from './newExpense.module.css'
+import classes from './editExpense.module.css'
 import { useContext, useState } from "react";
 
-const NewExpense = () => {
+const EditExpense = ({oldExpense, onEdited}) => {
+    // const {id, amount, description, category} = oldExpense;
     const userCtx = useContext(userContext);
     const expenseCtx = useContext(expenseContext);
-    const [amount, setAmount] = useState('');
-    const [desc, setDesc] = useState('');
-    const [cat, setCat] = useState('');
+    const [amount, setAmount] = useState(oldExpense.amount);
+    const [desc, setDesc] = useState(oldExpense.description);
+    const [cat, setCat] = useState(oldExpense.category);
     const localId = userCtx.localId;
 
     function handleAmountChange(evnt) {
@@ -23,26 +24,27 @@ const NewExpense = () => {
 
     function handleSubmit(evnt) {
         evnt.preventDefault();
-        const newExpense = {
+        const updatedExpense = {
+            id:oldExpense.id,
             amount: amount,
             description: desc,
             category: cat
         }
         // console.log(amount, desc, cat);
-        // adding new expense to specific user's database
-        fetch(`https://expense-tracker-react-ap-741f2-default-rtdb.firebaseio.com/expenses/${localId}.json`, {
-            method: 'POST',
-            body: JSON.stringify(newExpense),
+        //updating the expense
+        fetch(`https://expense-tracker-react-ap-741f2-default-rtdb.firebaseio.com/expenses/${localId}/${oldExpense.id}.json`, {
+            method: 'PUT',
+            body: JSON.stringify(updatedExpense),
             headers: {
                 'Content-Type': 'application/json'
             }
         }).then((res) => {
             if (res.ok) {
                 res.json().then((data) => {
-                    const expenseId = data.name;
+                    // const expenseId = data.name;
                     // console.log(expenseId);
-                    expenseCtx.addExpense({ ...newExpense, id: expenseId });
-                    alert('expense added successfully');
+                    expenseCtx.updateExpense(updatedExpense);
+                    alert('expense updated successfully');
                 })
             } else {
                 res.json().then((data) => {
@@ -54,6 +56,7 @@ const NewExpense = () => {
             setAmount('');
             setCat('');
             setDesc('');
+            onEdited();
         });
 
 
@@ -61,7 +64,7 @@ const NewExpense = () => {
     return (
         <div className={classes.main}>
             <div className={classes.newExpense}>
-                <h3>Add New Expense</h3>
+                <h3>Edit The Expense</h3>
                 <form onSubmit={handleSubmit}>
                     <div>
                         <label>Amount </label>
@@ -84,7 +87,8 @@ const NewExpense = () => {
                         </select>
                     </div>
                     <div className={classes.buttonContainer}>
-                        <button type="submit">Add</button>
+                        <button type="submit">update</button>
+                        <button type="submit">cancel</button>
                     </div>
                 </form>
             </div>
@@ -92,4 +96,4 @@ const NewExpense = () => {
     )
 }
 
-export default NewExpense;
+export default EditExpense;
