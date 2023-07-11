@@ -58,8 +58,9 @@ const EditExpense = ({oldExpense, onEdited}) => {
             setDesc('');
             onEdited();
         });
-
-
+    }
+    function handleCancelEditExpense(){
+        onEdited();
     }
     return (
         <div className={classes.main}>
@@ -88,7 +89,7 @@ const EditExpense = ({oldExpense, onEdited}) => {
                     </div>
                     <div className={classes.buttonContainer}>
                         <button type="submit">update</button>
-                        <button type="submit">cancel</button>
+                        <button type="submit" onClick={handleCancelEditExpense}>cancel</button>
                     </div>
                 </form>
             </div>

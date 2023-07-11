@@ -8,7 +8,7 @@ const ExpensePage = () => {
     let oldExpense;
     function handleOnEdit(expense){
         oldExpense = expense;
-        console.log(oldExpense);
+        // console.log(oldExpense);
         setEditableExpense(oldExpense);
     }
     function handleOnEdited(){
