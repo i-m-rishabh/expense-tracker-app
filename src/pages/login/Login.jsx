@@ -22,12 +22,15 @@ const Login = () => {
                     // console.log(data);
                     let expenses = [];
                     if(data){
-                        expenses = Object.values(data);
+                        // expenses = Object.values(data);
+                        for(let expenseId in data){
+                            expenses.push({...data[expenseId], id: expenseId});
+                        }
                     }
                     expenseCtx.loadExpenses(expenses);
+                    // console.log("fetched expenses"+ expenses);
                     navigate('/home');
-
-                alert('expenses fetched successfully');
+                    alert('expenses fetched successfully');
 
                 })
             }else{

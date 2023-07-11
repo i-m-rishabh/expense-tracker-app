@@ -10,6 +10,7 @@ const NewExpense = () => {
     const [desc, setDesc] = useState('');
     const [cat, setCat] = useState('');
     const localId = userCtx.localId;
+
     function handleAmountChange(evnt){
         setAmount(parseFloat(evnt.target.value));
     }
@@ -19,6 +20,7 @@ const NewExpense = () => {
     function handleDescChange(evnt){
         setDesc(evnt.target.value);
     }
+
     function handleSubmit(evnt){
         evnt.preventDefault();
         const newExpense = {
@@ -36,8 +38,12 @@ const NewExpense = () => {
             }
         }).then((res)=>{
             if(res.ok){
-                alert('expense added successfully');
-                expenseCtx.addExpense(newExpense);
+                res.json().then((data)=>{
+                    const expenseId = data.name;
+                    // console.log(expenseId);
+                    expenseCtx.addExpense({...newExpense, id:expenseId});
+                    alert('expense added successfully');
+                })
             }else{
                 res.json().then((data)=>{
                     alert(data.error.message);

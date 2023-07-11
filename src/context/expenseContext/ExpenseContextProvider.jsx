@@ -23,7 +23,13 @@ const ExpenseContextProvider = (props) => {
             })
 
         },
-        deleteExpense: function (){},
+        deleteExpense: function (id){
+            const updatedExpenses = expenses.filter((expense)=>{
+                return expense.id !== id;
+            })
+            setExpenses(updatedExpenses);
+            localStorage.setItem('expenses', JSON.stringify(updatedExpenses));
+        },
         clearExpenses: () => {
             setExpenses([]);
             localStorage.removeItem('expenses');
