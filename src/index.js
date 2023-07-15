@@ -6,15 +6,15 @@ import reportWebVitals from './reportWebVitals';
 import Router from './routing/routeSetup';
 import UserContextProvider from './context/userContext/UserContextProvider';
 import ExpenseContextProvider from './context/expenseContext/ExpenseContextProvider';
+import { Provider } from 'react-redux';
+import store from './store';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <UserContextProvider>
-      <ExpenseContextProvider>
-        <Router />
-      </ExpenseContextProvider>
-    </UserContextProvider>
+    <Provider store={store}>
+      <Router />
+    </Provider>
   </React.StrictMode>
 );
 

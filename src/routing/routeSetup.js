@@ -14,7 +14,7 @@ const Router = () => {
         {path:'/forget-password', element: <ForgetPassword/>},
         {path:'/home', element: <Home />},
         {path:'/update-profile', element: <UpdateProfilePage />},
-        {path:'/expense', element: <ExpensePage/>},
+        // {path:'/expense', element: <ExpensePage/>},
     ])
     return(
         <RouterProvider router={router}/>

@@ -1,16 +1,23 @@
-import expenseContext from '../../context/expenseContext/expenseContext';
-import { userContext } from '../../context/userContext/userContext';
+// import expenseContext from '../../context/expenseContext/expenseContext';
+// import { userContext } from '../../context/userContext/userContext';
+import { useDispatch, useSelector } from 'react-redux';
 import classes from './editExpense.module.css'
-import { useContext, useState } from "react";
+import { useState } from "react";
+import { authActions } from '../../store/auth';
+import { expenseActions } from '../../store/expense';
 
 const EditExpense = ({oldExpense, onEdited}) => {
+    const dispatch = useDispatch();
     // const {id, amount, description, category} = oldExpense;
-    const userCtx = useContext(userContext);
-    const expenseCtx = useContext(expenseContext);
+    // const userCtx = useContext(userContext);
+    const authData = useSelector(state => state.auth);
+    // const expenseCtx = useContext(expenseContext);
+    const expenseData = useSelector(state => state.expense);
+
     const [amount, setAmount] = useState(oldExpense.amount);
     const [desc, setDesc] = useState(oldExpense.description);
     const [cat, setCat] = useState(oldExpense.category);
-    const localId = userCtx.localId;
+    const localId = authData.profile.localId;
 
     function handleAmountChange(evnt) {
         setAmount(parseFloat(evnt.target.value));
@@ -43,7 +50,8 @@ const EditExpense = ({oldExpense, onEdited}) => {
                 res.json().then((data) => {
                     // const expenseId = data.name;
                     // console.log(expenseId);
-                    expenseCtx.updateExpense(updatedExpense);
+                    // expenseCtx.updateExpense(updatedExpense);
+                    dispatch(expenseActions.updateExpense(updatedExpense));
                     alert('expense updated successfully');
                 })
             } else {

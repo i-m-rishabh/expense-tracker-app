@@ -1,15 +1,21 @@
-import expenseContext from '../../context/expenseContext/expenseContext';
-import { userContext } from '../../context/userContext/userContext';
+// import expenseContext from '../../context/expenseContext/expenseContext';
+// import { userContext } from '../../context/userContext/userContext';
 import classes from './newExpense.module.css'
-import { useContext, useState } from "react";
+import { useState } from "react";
+import { authActions } from '../../store/auth';
+import { expenseActions } from '../../store/expense';
+import { useDispatch, useSelector } from 'react-redux';
 
 const NewExpense = () => {
-    const userCtx = useContext(userContext);
-    const expenseCtx = useContext(expenseContext);
+    // const userCtx = useContext(userContext);
+    // const expenseCtx = useContext(expenseContext);
+    const dispatch = useDispatch();
+    const authData = useSelector(state => state.auth);
+    const expenseData = useSelector(state => state.expense);
     const [amount, setAmount] = useState('');
     const [desc, setDesc] = useState('');
     const [cat, setCat] = useState('');
-    const localId = userCtx.localId;
+    const localId = authData.profile.localId;
 
     function handleAmountChange(evnt) {
         setAmount(parseFloat(evnt.target.value));
@@ -41,7 +47,8 @@ const NewExpense = () => {
                 res.json().then((data) => {
                     const expenseId = data.name;
                     // console.log(expenseId);
-                    expenseCtx.addExpense({ ...newExpense, id: expenseId });
+                    // expenseCtx.addExpense({ ...newExpense, id: expenseId });
+                    dispatch(expenseActions.addNewExpense({...newExpense, id: expenseId}));
                     alert('expense added successfully');
                 })
             } else {

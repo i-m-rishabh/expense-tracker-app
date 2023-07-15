@@ -1,12 +1,19 @@
-import { useContext, useState } from "react";
-import expenseContext from "../../context/expenseContext/expenseContext";
-import { userContext } from "../../context/userContext/userContext";
+// import { useContext, useState } from "react";
+// import expenseContext from "../../context/expenseContext/expenseContext";
+// import { userContext } from "../../context/userContext/userContext";
+
+import { useDispatch, useSelector } from "react-redux";
+import { authActions } from "../../store/auth";
+import { expenseActions } from "../../store/expense";
 
 const ListExpenses = (props) => {
-    const expenseCtx = useContext(expenseContext);
-    const expenses = expenseCtx.expenses;
-    const userCtx = useContext(userContext);
-    const localId = userCtx.localId;
+    const dispatch = useDispatch();
+    const authData = useSelector(state => state.auth);
+    const expenseData = useSelector(state => state.expense);
+    // const expenseCtx = useContext(expenseContext);
+    const expenses = expenseData.expenses;
+    // const userCtx = useContext(userContext);
+    const localId = authData.profile.localId;
 
     function handleDeleteExpense(id){
         // console.log(localId);
@@ -15,7 +22,8 @@ const ListExpenses = (props) => {
             method:'DELETE'
         }).then((res)=>{
             if(res.ok){
-                expenseCtx.deleteExpense(id);
+                // expenseCtx.deleteExpense(id);
+                dispatch(expenseActions.deleteExpense(id));
                 alert('expense successfully deleted');
                 // res.json().then((data)=>{
                 //     console.log(data);   // it's ruturning null on success

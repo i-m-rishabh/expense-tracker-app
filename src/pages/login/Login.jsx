@@ -4,74 +4,33 @@ import Input from '../../utils/Input';
 import Button from '../../utils/Button';
 import { Link, useNavigate } from 'react-router-dom';
 import { useContext, useState } from 'react';
-import { userContext } from '../../context/userContext/userContext';
-import expenseContext from '../../context/expenseContext/expenseContext';
+// import { userContext } from '../../context/userContext/userContext';
+// import expenseContext from '../../context/expenseContext/expenseContext';
+import { authActions } from '../../store/auth';
+import { expenseActions } from '../../store/expense';
+import { useDispatch } from 'react-redux';
 
 const Login = () => {
+
+    const dispatch = useDispatch();
     const [errorMessage, setErrorMessage] = useState('');
-    const userCtx = useContext(userContext);
-    const expenseCtx = useContext(expenseContext);
+    // const userCtx = useContext(userContext);
+    // const expenseCtx = useContext(expenseContext);
     const navigate = useNavigate();
     let email;
     let password;
-    function getUserExpenses(localId){
-        fetch(`https://expense-tracker-react-ap-741f2-default-rtdb.firebaseio.com/expenses/${localId}.json`
-        ).then((res)=>{
-            if(res.ok){
-                res.json().then((data)=>{
-                    // console.log(data);
-                    let expenses = [];
-                    if(data){
-                        // expenses = Object.values(data);
-                        for(let expenseId in data){
-                            expenses.push({...data[expenseId], id: expenseId});
-                        }
-                    }
-                    expenseCtx.loadExpenses(expenses);
-                    // console.log("fetched expenses"+ expenses);
-                    navigate('/home');
-                    alert('expenses fetched successfully');
 
-                })
-            }else{
-                res.json().then((data)=>{
-                    alert('expenses fetching fail: '+data.error.message);
-                })
-            }
-        }).catch((err)=>{console.log(err)})
+    function handleSubmit(event) {
+        event.preventDefault();
+        // console.log(email,password,confirmPassword);
+        if (!email || !password) {
+            setErrorMessage('All fields are mendatory');
+            return;
+        }
+        userLogin(email, password);
+        event.target.reset();
     }
-    function getUserProfile(idToken){
-        // useEffect(()=>{
-            fetch("https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyCoFYf3k4y5b6R_uejfdftwRMXSGn992rA",{
-                method: 'POST',
-                body: JSON.stringify({
-                    idToken: idToken
-                }),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }).then((res)=>{
-                res.json().then((data)=>{
-                  if(res.ok){
-                      const displayName = data.users[0].displayName;
-                      const photoUrl = data.users[0].photoUrl;
-                      const localId = data.users[0].localId;
-                      const emailVerified = data.users[0].emailVerified;
-                      
-                      userCtx.updateUser(displayName, photoUrl, localId, emailVerified);
-                      getUserExpenses(localId);
-                    //   alert('profile updated successfully ');
-                    // console.log(data.users.displayName);
-                    // console.log(data.users[0].displayName);
-                  }else{
-                    alert('Error '+ data.error.message);
-                    console.log(data);
-                  } 
-                //   navigate('/home');
-                })
-            }).catch((err)=>{console.log(err)})
-        // },[])
-    }
+
     async function userLogin(email, password) {
         const userData = {
             email: email,
@@ -88,7 +47,8 @@ const Login = () => {
             })
             if (res.ok) {
                 const data = await res.json();
-                userCtx.userLoggedIn(data.idToken);
+                // userCtx.userLoggedIn(data.idToken);
+                dispatch(authActions.login({ idToken: data.idToken }));
                 getUserProfile(data.idToken);
                 // console.log(data.idToken);
                 // console.log("congratulations! you have successfully logged in");
@@ -101,23 +61,82 @@ const Login = () => {
             console.log(err);
         }
     }
-    function handleSubmit(event) {
-        event.preventDefault();
-        // console.log(email,password,confirmPassword);
-        if (!email || !password) {
-            setErrorMessage('All fields are mendatory');
-            return;
-        }
-        userLogin(email, password);
-        event.target.reset();
+
+    function getUserProfile(idToken) {
+        // useEffect(()=>{
+        fetch("https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyCoFYf3k4y5b6R_uejfdftwRMXSGn992rA", {
+            method: 'POST',
+            body: JSON.stringify({
+                idToken: idToken
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then((res) => {
+            res.json().then((data) => {
+                if (res.ok) {
+                    const displayName = data.users[0].displayName;
+                    const photoUrl = data.users[0].photoUrl;
+                    const localId = data.users[0].localId;
+                    const emailVerified = data.users[0].emailVerified;
+                    const userProfile = {
+                        displayName,
+                        photoUrl,
+                        localId,
+                        emailVerified,
+                    }
+                    //   userCtx.updateUser(displayName, photoUrl, localId, emailVerified);
+                    dispatch(authActions.updateUserProfile(userProfile));
+                    getUserExpenses(localId);
+                    //   alert('profile updated successfully ');
+                    // console.log(data.users.displayName);
+                    // console.log(data.users[0].displayName);
+                } else {
+                    alert('Error ' + data.error.message);
+                    console.log(data);
+                }
+                //   navigate('/home');
+            })
+        }).catch((err) => { console.log(err) })
+        // },[])
     }
+    function getUserExpenses(localId) {
+        fetch(`https://expense-tracker-react-ap-741f2-default-rtdb.firebaseio.com/expenses/${localId}.json`
+        ).then((res) => {
+            if (res.ok) {
+                res.json().then((data) => {
+                    // console.log(data);
+                    let expenses = [];
+                    if (data) {
+                        // expenses = Object.values(data);
+                        for (let expenseId in data) {
+                            expenses.push({ ...data[expenseId], id: expenseId });
+                        }
+                    }
+                    // expenseCtx.loadExpenses(expenses);
+                    dispatch(expenseActions.setFetchedExpenses(expenses));
+                    // console.log("fetched expenses"+ expenses);
+                    navigate('/home');
+                    alert('expenses fetched successfully');
+
+                })
+            } else {
+                res.json().then((data) => {
+                    alert('expenses fetching fail: ' + data.error.message);
+                })
+            }
+        }).catch((err) => { console.log(err) })
+    }
+
+
+
     return (
         <div className={classes.main}>
             <SignupLoginLayout>
                 <h2 className={classes.title}>Login</h2>
                 <form className={classes.form} onSubmit={handleSubmit}>
                     <Input autocomplete='off' type={'email'} label={'Email'} auto onChange={(value) => { email = value; setErrorMessage('') }} />
-                    <Input autocomplete='off' type={'text'} label={'Password'} onChange={(value) => { password = value;  setErrorMessage('') }} />
+                    <Input autocomplete='off' type={'text'} label={'Password'} onChange={(value) => { password = value; setErrorMessage('') }} />
                     <Button text={'Login'} type={'submit'} />
                 </form>
                 <Link className={classes.forgetPassword} to={'/forget-password'}><p>Forget Passowrd</p></Link>

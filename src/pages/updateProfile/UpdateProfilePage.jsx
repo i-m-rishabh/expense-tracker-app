@@ -1,15 +1,19 @@
-import { useContext, useRef, useState } from 'react';
+import { useState } from 'react';
 import classes from './updateprofile.module.css';
-import { userContext } from '../../context/userContext/userContext';
+// import { userContext } from '../../context/userContext/userContext';
 import { useNavigate,} from 'react-router-dom';
-import VerifyEmail from './VerifyEmail';
+import { useDispatch, useSelector } from 'react-redux';
+import { authActions } from '../../store/auth';
+
 const UpdateProfilePage = () => {
+    const dispatch = useDispatch();
     const [verificationSent, setVerificationSent] = useState(false);
     const navigate = useNavigate();
-    const userCtx = useContext(userContext);
-    const idToken = userCtx.idToken;
-    const [displayName, setDisplayName] = useState(userCtx.displayName);
-    const [photoUrl, setPhotoUrl] = useState(userCtx.photoUrl);
+    // const userCtx = useContext(userContext);
+    const authData = useSelector(state => state.auth);
+    const idToken = authData.idToken;
+    const [displayName, setDisplayName] = useState(authData.profile.displayName);
+    const [photoUrl, setPhotoUrl] = useState(authData.profile.photoUrl);
 
     function handleSendVerification(){
         
@@ -56,7 +60,11 @@ const UpdateProfilePage = () => {
             if(res.ok){
                 alert('profile update successfully');
                 res.json().then((data)=>{
-                    userCtx.updateUser(data.displayName, data.photoUrl);
+                    // userCtx.updateUser(data.displayName, data.photoUrl);
+                    dispatch(authActions.updateUserProfile({
+                        displayName: data.displayName,
+                        photoUrl: data.photoUrl,
+                    }))
                     navigate('/home');
                 })
             }else{
@@ -88,8 +96,8 @@ const UpdateProfilePage = () => {
                     
                     <button>Update</button>
                 </form>
-                {userCtx.emailVerified && <p className={classes.verified}>Email Verified</p>}
-                {!userCtx.emailVerified && !verificationSent && <p className={classes.notVerified}>Email is not verified <a className={classes.clickHere} type='button' onClick={handleSendVerification}> click here </a> to verify</p>}
+                {authData.profile.emailVerified && <p className={classes.verified}>Email Verified</p>}
+                {!authData.emailVerified && !verificationSent && <p className={classes.notVerified}>Email is not verified <a className={classes.clickHere} type='button' onClick={handleSendVerification}> click here </a> to verify</p>}
                 {verificationSent && <p>verification sent you email address pease verify and login again</p>}
             </div>
         </div>
