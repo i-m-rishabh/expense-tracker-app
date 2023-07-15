@@ -11,10 +11,14 @@ const expenseSlice = createSlice({
     reducers: {
         setFetchedExpenses(state, action){
             state.expenses = [...action.payload];
+            state.totalExpenseAmount = action.payload.reduce((acc,expense)=>{
+                return acc + expense.amount;
+            },0);
         },
         addNewExpense(state, action){
             const newExpense = action.payload;
             state.expenses = [...state.expenses, newExpense];
+            state.totalExpenseAmount += newExpense.amount;
         },
         deleteExpense(state, action){
             const id = action.payload;
@@ -22,6 +26,10 @@ const expenseSlice = createSlice({
                 return expense.id !== id;
             })
             state.expenses = [...updatedExpenses];
+            state.totalExpenseAmount = updatedExpenses.reduce((acc,expense)=>{
+                return acc + expense.amount;
+            },0);
+            
         },
         updateExpense(state, action){
             const expense = action.payload;
@@ -33,6 +41,9 @@ const expenseSlice = createSlice({
                 }
             })
             state.expenses = [...updatedExpenses];
+            state.totalExpenseAmount = updatedExpenses.reduce((acc,expense)=>{
+                return acc + expense.amount;
+            },0);
         },
     }
 });
