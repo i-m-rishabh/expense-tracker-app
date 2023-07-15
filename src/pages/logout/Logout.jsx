@@ -1,13 +1,19 @@
-import { useContext } from 'react';
 import {AiOutlineLogout} from 'react-icons/ai'
 import { useNavigate } from 'react-router-dom';
-import { userContext } from '../../context/userContext/userContext';
+import { authActions } from '../../store/auth';
+import { useDispatch } from 'react-redux';
 
 const Logout = () => {
     const navigate = useNavigate();
-    const userCtx = useContext(userContext);
+    const dispatch = useDispatch();
     function handleLogout(){
-        userCtx.userLoggedOut();
+        dispatch(authActions.logout());
+        localStorage.removeItem('idToken');
+        localStorage.removeItem('localId');
+        localStorage.removeItem('expenses');
+        localStorage.removeItem('userProfile');
+        localStorage.removeItem('totalExpenseAmount');
+
         navigate('/login');
     }
     return(

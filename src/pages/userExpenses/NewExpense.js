@@ -1,5 +1,3 @@
-// import expenseContext from '../../context/expenseContext/expenseContext';
-// import { userContext } from '../../context/userContext/userContext';
 import classes from './newExpense.module.css'
 import { useState } from "react";
 import { authActions } from '../../store/auth';
@@ -7,8 +5,6 @@ import { expenseActions } from '../../store/expense';
 import { useDispatch, useSelector } from 'react-redux';
 
 const NewExpense = () => {
-    // const userCtx = useContext(userContext);
-    // const expenseCtx = useContext(expenseContext);
     const dispatch = useDispatch();
     const authData = useSelector(state => state.auth);
     const expenseData = useSelector(state => state.expense);
@@ -34,7 +30,6 @@ const NewExpense = () => {
             description: desc,
             category: cat
         }
-        // console.log(amount, desc, cat);
         // adding new expense to specific user's database
         fetch(`https://expense-tracker-react-ap-741f2-default-rtdb.firebaseio.com/expenses/${localId}.json`, {
             method: 'POST',
@@ -46,8 +41,6 @@ const NewExpense = () => {
             if (res.ok) {
                 res.json().then((data) => {
                     const expenseId = data.name;
-                    // console.log(expenseId);
-                    // expenseCtx.addExpense({ ...newExpense, id: expenseId });
                     dispatch(expenseActions.addNewExpense({...newExpense, id: expenseId}));
                     alert('expense added successfully');
                 })

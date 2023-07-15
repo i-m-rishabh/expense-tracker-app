@@ -3,9 +3,7 @@ import classes from './login.module.css';
 import Input from '../../utils/Input';
 import Button from '../../utils/Button';
 import { Link, useNavigate } from 'react-router-dom';
-import { useContext, useState } from 'react';
-// import { userContext } from '../../context/userContext/userContext';
-// import expenseContext from '../../context/expenseContext/expenseContext';
+import { useState } from 'react';
 import { authActions } from '../../store/auth';
 import { expenseActions } from '../../store/expense';
 import { useDispatch } from 'react-redux';
@@ -14,15 +12,12 @@ const Login = () => {
 
     const dispatch = useDispatch();
     const [errorMessage, setErrorMessage] = useState('');
-    // const userCtx = useContext(userContext);
-    // const expenseCtx = useContext(expenseContext);
     const navigate = useNavigate();
     let email;
     let password;
 
     function handleSubmit(event) {
         event.preventDefault();
-        // console.log(email,password,confirmPassword);
         if (!email || !password) {
             setErrorMessage('All fields are mendatory');
             return;
@@ -47,11 +42,11 @@ const Login = () => {
             })
             if (res.ok) {
                 const data = await res.json();
-                // userCtx.userLoggedIn(data.idToken);
                 dispatch(authActions.login({ idToken: data.idToken }));
+                
+                //storing token in local storage
+                localStorage.setItem('idToken',data.idToken);
                 getUserProfile(data.idToken);
-                // console.log(data.idToken);
-                // console.log("congratulations! you have successfully logged in");
             } else {
                 const data = await res.json();
                 // console.log(data);
@@ -85,37 +80,36 @@ const Login = () => {
                         localId,
                         emailVerified,
                     }
-                    //   userCtx.updateUser(displayName, photoUrl, localId, emailVerified);
                     dispatch(authActions.updateUserProfile(userProfile));
+
+                    //storing user profile in local Storage;
+                    localStorage.setItem('userProfile', JSON.stringify(userProfile));
                     getUserExpenses(localId);
-                    //   alert('profile updated successfully ');
-                    // console.log(data.users.displayName);
-                    // console.log(data.users[0].displayName);
                 } else {
                     alert('Error ' + data.error.message);
                     console.log(data);
                 }
-                //   navigate('/home');
             })
         }).catch((err) => { console.log(err) })
-        // },[])
     }
     function getUserExpenses(localId) {
         fetch(`https://expense-tracker-react-ap-741f2-default-rtdb.firebaseio.com/expenses/${localId}.json`
         ).then((res) => {
             if (res.ok) {
                 res.json().then((data) => {
-                    // console.log(data);
                     let expenses = [];
+                    let totalExpenseAmount = 0;
                     if (data) {
-                        // expenses = Object.values(data);
                         for (let expenseId in data) {
                             expenses.push({ ...data[expenseId], id: expenseId });
+                            totalExpenseAmount += data[expenseId].amount;
                         }
                     }
-                    // expenseCtx.loadExpenses(expenses);
                     dispatch(expenseActions.setFetchedExpenses(expenses));
-                    // console.log("fetched expenses"+ expenses);
+
+                    //storing expenses to local storage
+                    localStorage.setItem('expenses', JSON.stringify(expenses));
+                    localStorage.setItem('totalExpenseAmount', JSON.stringify(totalExpenseAmount));
                     navigate('/home');
                     alert('expenses fetched successfully');
 

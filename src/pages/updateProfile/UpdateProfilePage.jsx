@@ -97,7 +97,7 @@ const UpdateProfilePage = () => {
                     <button>Update</button>
                 </form>
                 {authData.profile.emailVerified && <p className={classes.verified}>Email Verified</p>}
-                {!authData.emailVerified && !verificationSent && <p className={classes.notVerified}>Email is not verified <a className={classes.clickHere} type='button' onClick={handleSendVerification}> click here </a> to verify</p>}
+                {!authData.profile.emailVerified && !verificationSent && <p className={classes.notVerified}>Email is not verified <a className={classes.clickHere} type='button' onClick={handleSendVerification}> click here </a> to verify</p>}
                 {verificationSent && <p>verification sent you email address pease verify and login again</p>}
             </div>
         </div>
