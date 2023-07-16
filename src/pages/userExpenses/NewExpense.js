@@ -1,10 +1,13 @@
-import classes from './newExpense.module.css'
+import classes from './newExpense.module.css';
+import darkClasses from '../../dark.module.css';
 import { useState } from "react";
 import { authActions } from '../../store/auth';
 import { expenseActions } from '../../store/expense';
 import { useDispatch, useSelector } from 'react-redux';
 
+
 const NewExpense = () => {
+    const isDark = useSelector(state => state.theme.isDark);
     const dispatch = useDispatch();
     const authData = useSelector(state => state.auth);
     const expenseData = useSelector(state => state.expense);
@@ -59,10 +62,10 @@ const NewExpense = () => {
 
     }
     return (
-        <div className={classes.main}>
-            <div className={classes.newExpense}>
+        <div className={`${classes.main} ${isDark?darkClasses.dark:''}`}>
+            <div className={`${classes.newExpense} ${isDark?darkClasses.dark:''}`}>
                 <h3>Add New Expense</h3>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} className={classes.form}>
                     <div>
                         <label>Amount </label>
                         <input type="float" onChange={handleAmountChange} value={amount}/>
@@ -71,7 +74,7 @@ const NewExpense = () => {
                         <label>Description </label>
                         <input type="text" onChange={handleDescChange} value={desc}/>
                     </div>
-                    <div>
+                    <div className={classes.category}>
                         <label>Category</label>
                         <select onChange={handleCategoryChange} value={cat}>
                             <option value='' disabled>select</option>
@@ -84,7 +87,7 @@ const NewExpense = () => {
                         </select>
                     </div>
                     <div className={classes.buttonContainer}>
-                        <button type="submit">Add</button>
+                        <button type="submit" className={classes.button}>Add</button>
                     </div>
                 </form>
             </div>

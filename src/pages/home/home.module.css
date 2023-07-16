@@ -2,11 +2,13 @@
 .main{
     box-sizing: border-box;
     position: relative;
-    width: 100vw;
+    max-width: 100vw;
+    width: 100%;
+    /* height: 100vh; */
     display: flex;
     flex-direction: column;
-    /* justify-content: */
     align-items: center;
+    background-color: #2f2fa1;
 }
 .header{
     box-sizing: border-box;
@@ -15,29 +17,46 @@
     display: flex;
     justify-content:space-between;
     align-items: center;
-    background-color: yellow;
+    background-color: #242582;
     padding: 5px;
 }
 .welcome{
     padding-inline: 30px;
     text-transform: uppercase;
     margin-right: auto;
+    background: linear-gradient(#f64c71,#6d3340);
+    color: transparent;
+    -webkit-background-clip: text;
+    font-weight: 800;
+    font-size: 30px;
 }
 .incompleteProfileMessage{
     border: 1px solid black;
     border-radius: 30px;
     padding: 10px;
 }
-/* .profile{
-    border: 5px solid red;
-    width: 30px;
-    height: 30px;
-    border: 1px solid black;
-    border-radius: 30px;
-    padding: 10px;
-} */
 .button{
-    background:linear-gradient(red, black);
+    background: linear-gradient(#f64c71,#6d3340);
     border-radius: 10px;
     color: white;
+}
+.button:hover{
+    color: red;
+}
+.premiumContainer{
+    margin: 20px;
+}
+.profileContainer{
+    
+}
+.logoutButton{
+
+}
+.expenseContainer{
+    /* border: 1px solid black; */
+    box-sizing: border-box;
+    position: relative;
+    color:white;
+    width: 100%;
+    padding: 10px 30px;
 }

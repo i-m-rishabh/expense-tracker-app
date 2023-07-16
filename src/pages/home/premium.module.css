@@ -1,0 +1,40 @@
+.main{
+    position: relative;
+    margin-inline: 3px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2px;
+}
+.features{
+    display: flex;
+    gap: 20px;
+}
+.button{
+    outline: none;
+    color: white;
+    background: linear-gradient(#f64c71,#f5b23e);
+    border: none;
+    font-weight: 600;
+    font-size: 15px;
+    /* text-decoration: underline; */
+    border-radius: 10px;
+}
+.dark{
+    font-size: 30px;
+}
+.dark:hover{
+    color: red;
+}
+.light{
+    font-size: 30px;
+}
+.light:hover{
+    color: red;
+}
+.pdf{
+    font-size: 30px;
+}
+.pdf:hover{
+    color: red;
+}

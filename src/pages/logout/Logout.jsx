@@ -2,7 +2,7 @@ import {AiOutlineLogout} from 'react-icons/ai'
 import { useNavigate } from 'react-router-dom';
 import { authActions } from '../../store/auth';
 import { useDispatch } from 'react-redux';
-
+import classes from './logout.module.css'
 const Logout = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -17,7 +17,7 @@ const Logout = () => {
         navigate('/login');
     }
     return(
-        <div onClick={handleLogout}>
+        <div onClick={handleLogout} className={classes.main}>
             <AiOutlineLogout style={{fontSize:"30px",paddingRight:'2px'}}/>
         </div>
     )

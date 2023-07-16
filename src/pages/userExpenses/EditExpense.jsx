@@ -5,8 +5,10 @@ import classes from './editExpense.module.css'
 import { useState } from "react";
 import { authActions } from '../../store/auth';
 import { expenseActions } from '../../store/expense';
+import darkClasses from '../../dark.module.css';
 
 const EditExpense = ({oldExpense, onEdited}) => {
+    const isDark = useSelector(state => state.theme.isDark);
     const dispatch = useDispatch();
     // const {id, amount, description, category} = oldExpense;
     // const userCtx = useContext(userContext);
@@ -71,7 +73,7 @@ const EditExpense = ({oldExpense, onEdited}) => {
         onEdited();
     }
     return (
-        <div className={classes.main}>
+        <div className={`${classes.main} ${isDark?darkClasses.dark:''}`}>
             <div className={classes.newExpense}>
                 <h3>Edit The Expense</h3>
                 <form onSubmit={handleSubmit}>

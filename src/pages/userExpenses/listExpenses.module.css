@@ -1,0 +1,71 @@
+
+.main{
+    box-sizing: border-box;
+    position: relative;
+    width: 100%;
+    min-width: 600px;
+    max-width: 800px;
+    background-color: #242582;
+    margin-top: 30px;
+    padding: 10px 10px;
+    border-radius: 10px;
+}
+.li{
+    position: relative;
+    box-sizing: border-box;
+    margin: 5px;
+    padding: 10px;
+    border: 1px solid #f64c71;
+    border-radius: 10px;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+.expenseGroup{
+    /* position: relative; */
+    display: flex;
+    /* justify-content: space-between; */
+    align-items: center;
+    gap:10px;
+}
+.expenseInfo{
+    position: absolute;
+    left: 140px;
+}
+.buttonGroup{
+
+}
+.amount{
+    background-color: #0e0f4e;
+    padding: 20px 20px;
+    border-radius: 10px;
+    border: 1px solid #f64c71;
+    font-size: 20px;
+}
+.description{
+    text-transform: uppercase;
+    font-size: 20px;
+}
+.category{
+    color: #f64c71;
+}
+.editButton{
+    outline: none;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    background-color: #f64c71;
+    padding: 8px 15px;    
+    margin-block: 5px;
+}
+.deleteButton{
+    outline: none;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    background-color: #f64c71;
+    padding: 8px 15px;
+    margin-block:2px;
+}

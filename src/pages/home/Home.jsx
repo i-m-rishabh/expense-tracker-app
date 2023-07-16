@@ -1,38 +1,33 @@
-// import { useContext, useEffect } from 'react';
 import classes from './home.module.css';
 import { Link } from 'react-router-dom';
-// import { userContext } from '../../context/userContext/userContext';
 import HomeProfile from './HomeProfile';
 import Logout from '../logout/Logout';
-// import NewExpense from '../userExpenses/NewExpense';
-// import ListExpenses from '../userExpenses/ListExpenses';
-// import EditExpense from '../userExpenses/EditExpense';
 import ExpensePage from '../userExpenses/ExpensePage';
 import { useSelector } from 'react-redux';
+import Premium from './Premium';
+import darkClasses from '../../dark.module.css';
 
 const Home = () => {
-    
-    // const userCtx = useContext(userContext);
-    // const idToken = userCtx.idToken;
+
     const authData = useSelector(state => state.auth);
     const expenseData = useSelector(state => state.expense);
-    // const idToken = authData.idToken;
     const displayName = authData.profile.displayName;
     const photoUrl = authData.profile.photoUrl;
     const totalExpenseAmount = expenseData.totalExpenseAmount;
+    const isDark = useSelector(state => state.theme.isDark);
     return(
-        <div className={classes.main}>
+        <div className={`${classes.main} ${isDark?darkClasses.dark:''}`}>
             <div className={classes.header}>
-                <div className={classes.welcome}>welcome to expense tracker</div>
-                {(totalExpenseAmount > 10000) && <button>Activate Premium</button>}
+                <div className={classes.welcome}>expense tracker</div>
+                {/* PREMIUM BUTTON */}
+                {(totalExpenseAmount > 10000) && <div className={classes.premiumContainer}><Premium/></div>}
+                {/* PROFILE CORNER */}
                 {!displayName && <div className={classes.incompleteProfileMessage}>your profile is incomplete <Link to={'/update-profile'}><button className={classes.button}>complete now</button></Link></div>}
-                {displayName && <Link to={'/update-profile'}><HomeProfile displayName={displayName} profilePhoto={photoUrl} className=""/></Link>}
-                {authData.isLoggedIn && <Logout/>}
+                {displayName && <div className={classes.profileContainer}><Link to={'/update-profile'}><HomeProfile displayName={displayName} profilePhoto={photoUrl}/></Link></div>}
+                {/* LOGOUT BUTTON */}
+                {authData.isLoggedIn && <div className={classes.button}><Logout/></div>}
             </div>
-            <div>
-                {/* <NewExpense/>
-                <EditExpense/>
-                <ListExpenses/> */}
+            <div className={classes.expenseContainer}>
                 <ExpensePage/>
             </div>
         </div>
