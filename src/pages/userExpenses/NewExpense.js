@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 
 const NewExpense = () => {
+    const [isloading, setloading] = useState(false);
     const isDark = useSelector(state => state.theme.isDark);
     const dispatch = useDispatch();
     const authData = useSelector(state => state.auth);
@@ -17,7 +18,7 @@ const NewExpense = () => {
     const localId = authData.profile.localId;
 
     function handleAmountChange(evnt) {
-        setAmount(parseFloat(evnt.target.value));
+        setAmount(parseFloat(evnt.target.value || ''));
     }
     function handleCategoryChange(evnt) {
         setCat(evnt.target.value);
@@ -28,12 +29,17 @@ const NewExpense = () => {
 
     function handleSubmit(evnt) {
         evnt.preventDefault();
+        if(!amount || !desc || !cat ){
+            alert('please fill all the details');
+            return;
+        }
         const newExpense = {
             amount: amount,
             description: desc,
             category: cat
         }
         // adding new expense to specific user's database
+        setloading(true);
         fetch(`https://expense-tracker-react-ap-741f2-default-rtdb.firebaseio.com/expenses/${localId}.json`, {
             method: 'POST',
             body: JSON.stringify(newExpense),
@@ -45,7 +51,7 @@ const NewExpense = () => {
                 res.json().then((data) => {
                     const expenseId = data.name;
                     dispatch(expenseActions.addNewExpense({...newExpense, id: expenseId}));
-                    alert('expense added successfully');
+                    // alert('expense added successfully');
                 })
             } else {
                 res.json().then((data) => {
@@ -57,6 +63,7 @@ const NewExpense = () => {
             setAmount('');
             setCat('');
             setDesc('');
+            setloading(false);
         });
 
 
@@ -68,7 +75,7 @@ const NewExpense = () => {
                 <form onSubmit={handleSubmit} className={classes.form}>
                     <div>
                         <label>Amount </label>
-                        <input type="float" onChange={handleAmountChange} value={amount}/>
+                        <input type="number" onChange={handleAmountChange} value={amount}/>
                     </div>
                     <div>
                         <label>Description </label>
@@ -87,7 +94,7 @@ const NewExpense = () => {
                         </select>
                     </div>
                     <div className={classes.buttonContainer}>
-                        <button type="submit" className={classes.button}>Add</button>
+                        <button type="submit" className={classes.button}>{isloading? 'loading...' : 'Add'}</button>
                     </div>
                 </form>
             </div>

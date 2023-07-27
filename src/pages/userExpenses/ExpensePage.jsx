@@ -10,6 +10,7 @@ const ExpensePage = () => {
     const isDark = useSelector(state => state.theme.isDark);
     const [isEditableExpense, setEditableExpense] = useState('');
     let oldExpense;
+    
     function handleOnEdit(expense){
         oldExpense = expense;
         // console.log(oldExpense);

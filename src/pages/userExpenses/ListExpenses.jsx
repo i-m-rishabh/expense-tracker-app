@@ -3,8 +3,10 @@ import { authActions } from "../../store/auth";
 import { expenseActions } from "../../store/expense";
 import classes from './listExpenses.module.css';
 import darkClasses from '../../dark.module.css';
+import { useState } from "react";
 
 const ListExpenses = (props) => {
+    const [isLoading, setLoading] = useState(false);
     const isDark = useSelector(state => state.theme.isDark);
     const dispatch = useDispatch();
     const authData = useSelector(state => state.auth);
@@ -13,9 +15,12 @@ const ListExpenses = (props) => {
     const localId = authData.profile.localId;
 
     function handleDeleteExpense(id) {
+        //deleting expense
+        setLoading(true);
         fetch(`https://expense-tracker-react-ap-741f2-default-rtdb.firebaseio.com/expenses/${localId}/${id}.json`, {
             method: 'DELETE'
         }).then((res) => {
+            setLoading(false);
             if (res.ok) {
                 dispatch(expenseActions.deleteExpense(id));
                 alert('expense successfully deleted');
@@ -39,7 +44,10 @@ const ListExpenses = (props) => {
 
     return (
         <div className={`${classes.main} ${isDark?darkClasses.dark:''}`}>
-            {
+            {isLoading && <div className={classes.loadingOverlay}>
+                <div className={classes.loadingSpinner}></div>
+            </div>}
+            {  
                 expenses.map((expense) => {
                     const { id, amount, description, category } = expense;
                     return (

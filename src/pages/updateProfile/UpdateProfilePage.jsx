@@ -1,22 +1,22 @@
 import { useState } from 'react';
 import classes from './updateprofile.module.css';
-// import { userContext } from '../../context/userContext/userContext';
-import { useNavigate, } from 'react-router-dom';
+import { Link, useNavigate, } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { authActions } from '../../store/auth';
 
 const UpdateProfilePage = () => {
+    const [isLoading, setLoading] = useState(false);
     const dispatch = useDispatch();
     const [verificationSent, setVerificationSent] = useState(false);
     const navigate = useNavigate();
-    // const userCtx = useContext(userContext);
     const authData = useSelector(state => state.auth);
     const idToken = authData.idToken;
     const [displayName, setDisplayName] = useState(authData.profile.displayName);
     const [photoUrl, setPhotoUrl] = useState(authData.profile.photoUrl);
 
     function handleSendVerification() {
-
+        //sending verification to email
+        setLoading(true);
         fetch("https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyCoFYf3k4y5b6R_uejfdftwRMXSGn992rA", {
             method: 'POST',
             body: JSON.stringify({
@@ -24,11 +24,11 @@ const UpdateProfilePage = () => {
                 idToken: idToken
             })
         }).then((res) => {
+            setLoading(false);
             if (res.ok) {
                 setVerificationSent(true);
                 alert('email verification sent. Enter the code and verify');
             } else {
-                // alert("error in verification sending");
                 res.json().then((data) => {
                     alert(data.error.message);
                 })
@@ -49,7 +49,8 @@ const UpdateProfilePage = () => {
             photoUrl: imageUrl,
             returnSecureToken: true
         }
-
+        //updating user data into database
+        setLoading(true);
         fetch("https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyCoFYf3k4y5b6R_uejfdftwRMXSGn992rA", {
             method: 'POST',
             body: JSON.stringify(body),
@@ -57,10 +58,10 @@ const UpdateProfilePage = () => {
                 'Content-Type': 'application/json'
             }
         }).then((res) => {
+            setLoading(false);
             if (res.ok) {
                 alert('profile update successfully');
                 res.json().then((data) => {
-                    // userCtx.updateUser(data.displayName, data.photoUrl);
                     dispatch(authActions.updateUserProfile({
                         displayName: data.displayName,
                         photoUrl: data.photoUrl,
@@ -81,7 +82,7 @@ const UpdateProfilePage = () => {
     }
     return (
         <div className={classes.main}>
-            {/* <div className={classes.heading}>welcome to expense tracker</div> */}
+        <Link to={'/home'} className={classes.backToHome}>Home</Link>
             <div className={classes.content}>
                 <h3>Profile Details</h3>
                 <form onSubmit={handleSubmit} className={classes.form}>
@@ -94,7 +95,7 @@ const UpdateProfilePage = () => {
                         <input type='text' onChange={handlePhotoUrlChange} value={photoUrl} />
                     </div>
                     <div>
-                        <button className={classes.button}>Update</button>
+                        <button className={classes.button}>{isLoading? 'loading...' : 'Update'}</button>
                     </div>
                 </form>
                 {authData.profile.emailVerified && <p className={classes.verified}>Email Verified</p>}

@@ -5,9 +5,6 @@
     justify-content: center;
     align-items: center;
 }
-.main h3{
-
-}
 .main form{
     /* display: flex; */
     flex-direction: column;
@@ -16,8 +13,44 @@
 }
 .buttonContainer{
     margin: 20px;
+    gap:10px;
     display: flex;
     justify-content: center;
     align-items: center;
     
 }
+.editExpense{
+    background-color: #242582;
+    margin-top: 20px;
+    padding: 10px 80px;
+    border-radius: 10px;
+}
+.form{
+    color: #f64c71;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap:15px
+}
+.category{
+    align-self: flex-start;
+}
+.button{
+    background-color: #f64c71;
+    padding: 10px 15px;
+    color: white;
+    outline: none;
+    border: none;
+    border-radius: 10px;
+    font-weight: 800;
+}
+.button:hover{
+    background-color: #a91f3d;
+    padding: 10px 15px;
+    color: white;
+    outline: none;
+    border: none;
+    border-radius: 10px;
+}
+

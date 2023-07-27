@@ -1,19 +1,14 @@
-// import expenseContext from '../../context/expenseContext/expenseContext';
-// import { userContext } from '../../context/userContext/userContext';
 import { useDispatch, useSelector } from 'react-redux';
 import classes from './editExpense.module.css'
 import { useState } from "react";
-import { authActions } from '../../store/auth';
 import { expenseActions } from '../../store/expense';
 import darkClasses from '../../dark.module.css';
 
 const EditExpense = ({oldExpense, onEdited}) => {
+    const [isLoading, setLoading] = useState(false);
     const isDark = useSelector(state => state.theme.isDark);
     const dispatch = useDispatch();
-    // const {id, amount, description, category} = oldExpense;
-    // const userCtx = useContext(userContext);
     const authData = useSelector(state => state.auth);
-    // const expenseCtx = useContext(expenseContext);
     const expenseData = useSelector(state => state.expense);
 
     const [amount, setAmount] = useState(oldExpense.amount);
@@ -22,7 +17,7 @@ const EditExpense = ({oldExpense, onEdited}) => {
     const localId = authData.profile.localId;
 
     function handleAmountChange(evnt) {
-        setAmount(parseFloat(evnt.target.value));
+        setAmount(parseFloat(evnt.target.value) || '');
     }
     function handleCategoryChange(evnt) {
         setCat(evnt.target.value);
@@ -39,8 +34,8 @@ const EditExpense = ({oldExpense, onEdited}) => {
             description: desc,
             category: cat
         }
-        // console.log(amount, desc, cat);
         //updating the expense
+        setLoading(true);
         fetch(`https://expense-tracker-react-ap-741f2-default-rtdb.firebaseio.com/expenses/${localId}/${oldExpense.id}.json`, {
             method: 'PUT',
             body: JSON.stringify(updatedExpense),
@@ -50,11 +45,8 @@ const EditExpense = ({oldExpense, onEdited}) => {
         }).then((res) => {
             if (res.ok) {
                 res.json().then((data) => {
-                    // const expenseId = data.name;
-                    // console.log(expenseId);
-                    // expenseCtx.updateExpense(updatedExpense);
                     dispatch(expenseActions.updateExpense(updatedExpense));
-                    alert('expense updated successfully');
+                    // alert('expense updated successfully');
                 })
             } else {
                 res.json().then((data) => {
@@ -67,6 +59,8 @@ const EditExpense = ({oldExpense, onEdited}) => {
             setCat('');
             setDesc('');
             onEdited();
+            setLoading(false);
+
         });
     }
     function handleCancelEditExpense(){
@@ -74,9 +68,9 @@ const EditExpense = ({oldExpense, onEdited}) => {
     }
     return (
         <div className={`${classes.main} ${isDark?darkClasses.dark:''}`}>
-            <div className={classes.newExpense}>
+            <div className={`${classes.editExpense} ${isDark?darkClasses.dark:''}`}>
                 <h3>Edit The Expense</h3>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} className={classes.form}>
                     <div>
                         <label>Amount </label>
                         <input type="float" onChange={handleAmountChange} value={amount}/>
@@ -85,7 +79,7 @@ const EditExpense = ({oldExpense, onEdited}) => {
                         <label>Description </label>
                         <input type="text" onChange={handleDescChange} value={desc}/>
                     </div>
-                    <div>
+                    <div className={classes.category}>
                         <label>Category</label>
                         <select onChange={handleCategoryChange} value={cat}>
                             <option value='' disabled>select</option>
@@ -98,8 +92,8 @@ const EditExpense = ({oldExpense, onEdited}) => {
                         </select>
                     </div>
                     <div className={classes.buttonContainer}>
-                        <button type="submit">update</button>
-                        <button type="submit" onClick={handleCancelEditExpense}>cancel</button>
+                        <button type="submit" className={classes.button}>{isLoading?'loading...' : 'update'}</button>
+                        <button type="submit" onClick={handleCancelEditExpense} className={classes.button}>cancel</button>
                     </div>
                 </form>
             </div>

@@ -13,13 +13,17 @@ const Premium = () => {
     const isDark = useSelector(state => state.theme.isDark);
     const downloadRef = useRef(null);
     
+    //ACTIVATE PREMIUM FUNCTION
     function handleActivatePremium(){
         setPremium(true);
     }
+    //THEME CHANGE FUNCTION
     function handleThemeChange(){
         dispatch(themeActions.toggleTheme());
     }
+    //DOWNLOAD CSV FILE FUNCTION
     function handleDownloadFile(){
+        //Generating csv formate text
         const file = expenses.map((expense) => {
             let exp = 'amount,category,description\n';
             for(let id in expense){
@@ -29,6 +33,7 @@ const Premium = () => {
             }
             return exp;
         }).join('\n');
+        //Making blob and providing url to download it
         const blob = new Blob([file]);
         downloadRef.current.href = URL.createObjectURL(blob);
         console.log(file);

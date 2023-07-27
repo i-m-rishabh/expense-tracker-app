@@ -9,7 +9,7 @@ import { expenseActions } from '../../store/expense';
 import { useDispatch } from 'react-redux';
 
 const Login = () => {
-
+    const [isLoading, setLoading] = useState(false);
     const dispatch = useDispatch();
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
@@ -27,6 +27,7 @@ const Login = () => {
     }
 
     async function userLogin(email, password) {
+        setLoading(true);
         const userData = {
             email: email,
             password: password,
@@ -43,9 +44,9 @@ const Login = () => {
             if (res.ok) {
                 const data = await res.json();
                 dispatch(authActions.login({ idToken: data.idToken }));
-                
+
                 //storing token in local storage
-                localStorage.setItem('idToken',data.idToken);
+                localStorage.setItem('idToken', data.idToken);
                 getUserProfile(data.idToken);
             } else {
                 const data = await res.json();
@@ -54,6 +55,7 @@ const Login = () => {
             }
         } catch (err) {
             console.log(err);
+            setLoading(false);
         }
     }
 
@@ -90,13 +92,17 @@ const Login = () => {
                     console.log(data);
                 }
             })
-        }).catch((err) => { console.log(err) })
+        }).catch((err) => {
+            console.log(err)
+            setLoading(false)
+        })
     }
     function getUserExpenses(localId) {
         fetch(`https://expense-tracker-react-ap-741f2-default-rtdb.firebaseio.com/expenses/${localId}.json`
         ).then((res) => {
             if (res.ok) {
                 res.json().then((data) => {
+                    setLoading(false);
                     let expenses = [];
                     let totalExpenseAmount = 0;
                     if (data) {
@@ -110,16 +116,21 @@ const Login = () => {
                     //storing expenses to local storage
                     localStorage.setItem('expenses', JSON.stringify(expenses));
                     localStorage.setItem('totalExpenseAmount', JSON.stringify(totalExpenseAmount));
+                    setLoading(false);
                     navigate('/home');
-                    alert('expenses fetched successfully');
+                    // alert('expenses fetched successfully');
 
                 })
             } else {
                 res.json().then((data) => {
                     alert('expenses fetching fail: ' + data.error.message);
                 })
+                setLoading(false);
             }
-        }).catch((err) => { console.log(err) })
+        }).catch((err) => {
+            console.log(err)
+            setLoading(false)
+        })
     }
 
 
@@ -131,7 +142,7 @@ const Login = () => {
                 <form className={classes.form} onSubmit={handleSubmit}>
                     <Input autocomplete='off' type={'email'} label={'Email'} auto onChange={(value) => { email = value; setErrorMessage('') }} />
                     <Input autocomplete='off' type={'text'} label={'Password'} onChange={(value) => { password = value; setErrorMessage('') }} />
-                    <Button text={'Login'} type={'submit'} />
+                    <Button text={isLoading ? 'Loading...' : 'Login'} type={'submit'} />
                 </form>
                 <Link className={classes.forgetPassword} to={'/forget-password'}><p>Forget Passowrd</p></Link>
                 <Link className={classes.customLink} to={'/signup'}><p className={classes.text}>Don't have an account <span className={classes.signupText}>signUp</span></p></Link>
